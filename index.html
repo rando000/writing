@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --text: #1a1a18;
+    --muted: #6b6b65;
+    --faint: #9b9b94;
+    --border: #e8e6e0;
+    --bg: #faf9f7;
+    --link: #1a1a18;
+    --accent: #c8603a;
+  }
+
+  html { font-size: 18px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', Georgia, serif;
+    line-height: 1.75;
+    padding: 0 1.5rem;
+  }
+
+  .site {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 4rem 0 6rem;
+  }
+
+  /* Header */
+  header {
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .site-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  nav a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  nav a:hover { color: var(--text); }
+
+  /* Essay list */
+  .essays { list-style: none; }
+
+  .essay-item {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+
+  .essay-item:first-child { padding-top: 0; }
+
+  .essay-link {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    transition: color 0.15s;
+    flex: 1;
+  }
+
+  .essay-link:hover { color: var(--accent); }
+
+  .essay-date {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--faint);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Section label */
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 0.75rem;
+  }
+
+  /* Essay page */
+  .essay-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .essay-title {
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
+  }
+
+  .essay-meta {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--faint);
+  }
+
+  .essay-body {
+    font-size: 1rem;
+    line-height: 1.85;
+  }
+
+  .essay-body p { margin-bottom: 1.4rem; }
+
+  .essay-body h2 {
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin: 2.5rem 0 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .essay-body a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s;
+  }
+
+  .essay-body a:hover { text-decoration-color: var(--accent); }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 3rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover { color: var(--text); }
+
+  /* About page */
+  .about-body {
+    font-size: 1rem;
+    line-height: 1.85;
+  }
+
+  .about-body p { margin-bottom: 1.4rem; }
+
+  /* Hidden pages */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Footer */
+  footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--faint);
+  }
+
+  @media (max-width: 500px) {
+    html { font-size: 17px; }
+    .essay-item { flex-direction: column; gap: 0.2rem; }
+    header { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <header>
+    <a class="site-name" href="#" onclick="showPage('home'); return false;">Writing</a>
+    <nav>
+      <a href="#" onclick="showPage('home'); return false;">Essays</a>
+      <a href="#" onclick="showPage('about'); return false;">About</a>
+    </nav>
+  </header>
+
+  <!-- HOME PAGE -->
+  <div id="home" class="page active">
+    <p class="section-label">Essays</p>
+    <ul class="essays">
+
+      <li class="essay-item">
+        <a class="essay-link" href="#" onclick="showEssay('essay1'); return false;">
+          Why most startup advice is wrong for most founders
+        </a>
+        <span class="essay-date">May 2025</span>
+      </li>
+
+      <li class="essay-item">
+        <a class="essay-link" href="#" onclick="showEssay('essay2'); return false;">
+          The thing about conviction
+        </a>
+        <span class="essay-date">Mar 2025</span>
+      </li>
+
+      <li class="essay-item">
+        <a class="essay-link" href="#" onclick="showEssay('essay3'); return false;">
+          On building things that last
+        </a>
+        <span class="essay-date">Jan 2025</span>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- ESSAY 1 -->
+  <div id="essay1" class="page">
+    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
+    <div class="essay-header">
+      <h1 class="essay-title">Why most startup advice is wrong for most founders</h1>
+      <div class="essay-meta">May 2025</div>
+    </div>
+    <div class="essay-body">
+      <p>This is placeholder content. Replace with your essay text.</p>
+      <p>The beautiful thing about a simple site like this is that you can focus entirely on the writing. No distractions, no widgets, no clutter — just words on a page.</p>
+      <p>Add as many paragraphs, headers, and links as you need. The format will hold.</p>
+    </div>
+  </div>
+
+  <!-- ESSAY 2 -->
+  <div id="essay2" class="page">
+    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
+    <div class="essay-header">
+      <h1 class="essay-title">The thing about conviction</h1>
+      <div class="essay-meta">March 2025</div>
+    </div>
+    <div class="essay-body">
+      <p>This is placeholder content. Replace with your essay text.</p>
+      <p>Each essay is its own section in this file. To add a new one, copy an essay block, give it a new id, add a list item on the home page, and you're done.</p>
+    </div>
+  </div>
+
+  <!-- ESSAY 3 -->
+  <div id="essay3" class="page">
+    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
+    <div class="essay-header">
+      <h1 class="essay-title">On building things that last</h1>
+      <div class="essay-meta">January 2025</div>
+    </div>
+    <div class="essay-body">
+      <p>This is placeholder content. Replace with your essay text.</p>
+      <p>The site is a single HTML file — no build tools, no CMS, no dependencies beyond two Google Fonts. Host it anywhere.</p>
+    </div>
+  </div>
+
+  <!-- ABOUT PAGE -->
+  <div id="about" class="page">
+    <div class="about-body">
+      <p>Write a short bio here. Keep it plain — who you are, what you care about, maybe where you're based. A sentence or two is enough.</p>
+      <p>You can add a link to your Twitter, email, or wherever you want people to reach you.</p>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025
+  </footer>
+
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function showEssay(id) {
+    showPage(id);
+  }
+</script>
+
+</body>
+</html>
