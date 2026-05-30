@@ -1,6 +1,13 @@
 {
   "essays": [
     {
+      "id": "essay_1780169123827",
+      "title": "Mental Flaws",
+      "date": "May 2026",
+      "body": "The first flaw is the failure of perspective. It is difficult to accurately observe a system that we are inside of.\n\nThe second flaw is ego—the part of us that is afraid, proud, and always in competition. Many of us have too much invested in our opinions to allow feedback to update them. We perceive updating our opinions to be painful, like admitting defeat.\n\nThe third flaw is distance. When we see or feel the consequences of our decisions immediately, it is easier to accept this feedback and update our thinking. When the consequences are far removed, delayed, or unseen, we may not ever even observe the feedback in order to update our thinking.",
+      "createdAt": "2026-05-30T19:25:23.827Z"
+    },
+    {
       "id": "essay_1780167435139",
       "title": "Maps & Models",
       "date": "May 2026",
