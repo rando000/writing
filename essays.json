@@ -1,6 +1,13 @@
 {
   "essays": [
     {
+      "id": "essay_1780175532763",
+      "title": "Falsifiability",
+      "date": "May 2026",
+      "body": "There is an idea that if you cannot prove something wrong, you cannot prove it right either.\n\nSaid another way, science advances less by confirming ideas and more by trying hard to break them and see which ones still survive.\n\nA good theory must be able to be proven wrong under stated conditions.\n\nFalsification is the opposite of verification: you must try to show that a theory is incorrect and, if you fail to, you actually strengthen it.\n\nIf a theory can't ever be proven false, because we have no way of testing it, then the best we can do is try to determine its probability of being true.\n\nWe tend to assume that the worst that has happened is the worst that can happen, and then prepare for that. We forget that \"the worst\" once superseded a previous understanding of what was the worst. Therefore, we need to prepare more for the extremes allowable by physics.\n\nAn example: A chicken has received feed every day of its life, thus believes it will continue to in perpetuity. The feedings appear as a law—until the day the farmer cooks the chicken. They are then revealed to be a trend, not a predictor of the future state of affairs.\n\nTrend is not destiny.",
+      "createdAt": "2026-05-30T21:12:12.763Z"
+    },
+    {
       "id": "essay_1780172224254",
       "title": "Circle of Competence",
       "date": "May 2026",
