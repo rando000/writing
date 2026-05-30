@@ -9,383 +9,120 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --text: #1a1a18;
     --muted: #6b6b65;
     --faint: #9b9b94;
     --border: #e8e6e0;
     --bg: #faf9f7;
-    --link: #1a1a18;
     --accent: #c8603a;
   }
-
   html { font-size: 18px; }
+  body { background: var(--bg); color: var(--text); font-family: 'Lora', Georgia, serif; line-height: 1.75; padding: 0 1.5rem; }
+  .site { max-width: 640px; margin: 0 auto; padding: 4rem 0 6rem; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Lora', Georgia, serif;
-    line-height: 1.75;
-    padding: 0 1.5rem;
-  }
+  header { margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; }
+  .site-name { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 1rem; letter-spacing: -0.01em; color: var(--text); text-decoration: none; cursor: pointer; background: none; border: none; padding: 0; }
 
-  .site {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 4rem 0 6rem;
-  }
+  .section-label { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.75rem; }
 
-  /* Header */
-  header {
-    margin-bottom: 3.5rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .site-name {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    font-size: 1rem;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    text-decoration: none;
-  }
-
-  nav {
-    display: flex;
-    gap: 1.5rem;
-  }
-
-  nav a {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-
-  nav a:hover { color: var(--text); }
-
-  /* Essay list */
   .essays { list-style: none; }
-
-  .essay-item {
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1.5rem;
-  }
-
+  .essay-item { padding: 1.25rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem; }
   .essay-item:first-child { padding-top: 0; }
-
-  .essay-link {
-    color: var(--text);
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.4;
-    transition: color 0.15s;
-    flex: 1;
-  }
-
+  .essay-link { color: var(--text); text-decoration: none; font-size: 1rem; font-weight: 400; line-height: 1.4; transition: color 0.15s; flex: 1; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; text-align: left; }
   .essay-link:hover { color: var(--accent); }
+  .essay-date { font-family: 'DM Sans', sans-serif; font-size: 0.78rem; color: var(--faint); white-space: nowrap; flex-shrink: 0; }
 
-  .essay-date {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.78rem;
-    color: var(--faint);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* Section label */
-  .section-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--faint);
-    margin-bottom: 0.75rem;
-  }
-
-  /* Essay page */
-  .essay-header {
-    margin-bottom: 2.5rem;
-  }
-
-  .essay-title {
-    font-size: 1.75rem;
-    font-weight: 500;
-    line-height: 1.25;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.6rem;
-  }
-
-  .essay-meta {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    color: var(--faint);
-  }
-
-  .essay-body {
-    font-size: 1rem;
-    line-height: 1.85;
-  }
-
+  .essay-header { margin-bottom: 2.5rem; }
+  .essay-title { font-size: 1.75rem; font-weight: 500; line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+  .essay-meta { font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--faint); }
+  .essay-body { font-size: 1rem; line-height: 1.85; }
   .essay-body p { margin-bottom: 1.4rem; }
 
-  .essay-body h2 {
-    font-size: 1.15rem;
-    font-weight: 500;
-    margin: 2.5rem 0 0.75rem;
-    letter-spacing: -0.01em;
-  }
-
-  .essay-body a {
-    color: var(--text);
-    text-decoration: underline;
-    text-decoration-color: var(--border);
-    text-underline-offset: 3px;
-    transition: text-decoration-color 0.15s;
-  }
-
-  .essay-body a:hover { text-decoration-color: var(--accent); }
-
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    color: var(--muted);
-    text-decoration: none;
-    margin-bottom: 3rem;
-    transition: color 0.15s;
-  }
-
+  .back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--muted); text-decoration: none; margin-bottom: 3rem; cursor: pointer; background: none; border: none; padding: 0; transition: color 0.15s; }
   .back-link:hover { color: var(--text); }
 
-  /* About page */
-  .about-body {
-    font-size: 1rem;
-    line-height: 1.85;
-  }
+  .empty-state { font-size: 0.95rem; color: var(--faint); padding: 1.25rem 0; }
 
-  .about-body p { margin-bottom: 1.4rem; }
+  .loading { font-size: 0.9rem; color: var(--faint); padding: 1.25rem 0; }
 
-  /* Hidden pages */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* Footer */
-  footer {
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.78rem;
-    color: var(--faint);
-  }
+  footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); font-family: 'DM Sans', sans-serif; font-size: 0.78rem; color: var(--faint); }
 
   @media (max-width: 500px) {
     html { font-size: 17px; }
-    .essay-item { flex-direction: column; gap: 0.2rem; }
-    header { flex-direction: column; gap: 1rem; }
+    .essay-item { flex-direction: column; gap: 0.2rem; align-items: flex-start; }
   }
 </style>
 </head>
 <body>
-
 <div class="site">
 
   <header>
-    <a class="site-name" href="#" onclick="showPage('home'); return false;">Writing</a>
-    <nav>
-      <a href="#" onclick="showPage('home'); return false;">Essays</a>
-      <a href="#" onclick="showPage('about'); return false;">About</a>
-    </nav>
+    <button class="site-name" onclick="showHome()">Writing</button>
   </header>
 
-  <!-- HOME PAGE -->
-  <div id="home" class="page active">
-    <p class="section-label">Essays</p>
-    <ul class="essays">
-      <li class="essay-item">
-        <a class="essay-link" href="#" onclick="showEssay('essay_1780165182572'); return false;">test2</a>
-        <span class="essay-date">may</span>
-      </li>
-      <li class="essay-item">
-        <a class="essay-link" href="#" onclick="showEssay('essay_1780165137562'); return false;">japen</a>
-        <span class="essay-date">may</span>
-      </li>
-
-    </ul>
+  <div id="content">
+    <p class="loading">Loading...</p>
   </div>
 
-  <!-- ESSAY 1 -->
-  <div id="essay1" class="page">
-    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
-    <div class="essay-header">
-      <h1 class="essay-title">Why most startup advice is wrong for most founders</h1>
-      <div class="essay-meta">May 2025</div>
-    </div>
-    <div class="essay-body">
-      <p>This is placeholder content. Replace with your essay text.</p>
-      <p>The beautiful thing about a simple site like this is that you can focus entirely on the writing. No distractions, no widgets, no clutter — just words on a page.</p>
-      <p>Add as many paragraphs, headers, and links as you need. The format will hold.</p>
-    </div>
-  </div>
-
-  <!-- ESSAY 2 -->
-  <div id="essay2" class="page">
-    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
-    <div class="essay-header">
-      <h1 class="essay-title">The thing about conviction</h1>
-      <div class="essay-meta">March 2025</div>
-    </div>
-    <div class="essay-body">
-      <p>This is placeholder content. Replace with your essay text.</p>
-      <p>Each essay is its own section in this file. To add a new one, copy an essay block, give it a new id, add a list item on the home page, and you're done.</p>
-    </div>
-  </div>
-
-  <!-- ESSAY 3 -->
-  <div id="essay3" class="page">
-    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
-    <div class="essay-header">
-      <h1 class="essay-title">On building things that last</h1>
-      <div class="essay-meta">January 2025</div>
-    </div>
-    <div class="essay-body">
-      <p>This is placeholder content. Replace with your essay text.</p>
-      <p>The site is a single HTML file — no build tools, no CMS, no dependencies beyond two Google Fonts. Host it anywhere.</p>
-    </div>
-  </div>
-    <div class="essay-body">
-      <p>hello</p>
-    </div>
-  </div>
-
-
-  <!-- essay_1780164861468 -->
-  <div id="essay_1780164861468" class="page">
-    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
-    <div class="essay-header">
-      <h1 class="essay-title">test2</h1>
-      <div class="essay-meta">mayb</div>
-    </div>
-    <div class="essay-body">
-      <p>hello</p>
-    </div>
-  </div>
-
-
-  <!-- essay_1780165137562 -->
-  <div id="essay_1780165137562" class="page">
-    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
-    <div class="essay-header">
-      <h1 class="essay-title">japen</h1>
-      <div class="essay-meta">may</div>
-    </div>
-    <div class="essay-body">
-      <p>On the distance between Japan and Yemen, and what it tells us about the range of human possibility</p>
-      <p>I have spent time in both countries. Not enough to claim expertise, but enough to be changed by them. Japan first, then Yemen, separated by years and circumstance, and yet when I try to understand one I keep reaching for the other. They are among the most culturally distinct places on earth — geographically, historically, linguistically, religiously — and yet placing them side by side reveals something that a single country alone cannot: the full range of what a human civilization can become when left to develop on its own terms, over a long enough period, without being told it was doing it wrong.</p>
-      <p>This is not a comparison designed to rank. It is not an attempt to say one is better. It is an attempt to understand what culture actually is — not the food and the festivals, not the costumes and the customs that make it onto travel brochures — but the invisible operating system underneath. The set of assumptions so deep that people who hold them do not know they have them. The things you only see when you encounter their opposite.</p>
-      <p>---</p>
-      <p>## Silence and noise</p>
-      <p>The first thing you notice in Japan is the silence. Not the absence of sound — Tokyo is one of the loudest cities on earth — but the silence between people. Strangers on the train sit inches apart and manage to occupy completely separate universes. Nobody makes eye contact. Nobody speaks. The silence is not cold. It is, once you understand it, deeply respectful. It is a way of saying: your interior world is yours. I will not intrude upon it.</p>
-      <p>Yemen is the opposite. Silence between people is an emergency. If you are sitting with someone and neither of you is talking, something has gone wrong. The room will be filled — with conversation, with the sound of qat being chewed, with an argument about politics or poetry or the price of diesel, with laughter that starts without warning and ends the same way. Yemeni hospitality is not a performance. It is a philosophy. The guest is sacred. The guest must be fed, must be spoken to, must be made to feel that his arrival has improved the quality of the day. To leave a guest alone with his thoughts is not respect. It is neglect.</p>
-      <p>Two cultures, two completely opposite interpretations of what it means to honor another person's presence.</p>
-      <p>In Japan, you honor presence by not imposing on it. In Yemen, you honor presence by filling it.</p>
-      <p>Neither is wrong. Both are completely coherent, internally consistent systems for managing the fundamental problem of human coexistence: how do you live alongside other people without either suffocating them or abandoning them?</p>
-      <p>---</p>
-      <p>## The group and the tribe</p>
-      <p>Japan is a famously collectivist society. The individual exists in relation to the group. Your identity is not separate from your company, your school, your family, your neighborhood. There is a word — *amae* — that has no direct English translation, something like a loving dependence, the assumption that those close to you will indulge your needs, and the corresponding obligation to indulge theirs. The group is not a constraint on the self. The group is where the self lives.</p>
-      <p>But Japan's collectivism is a particular kind. It is institutional. It runs along the lines of formal organizations. The company, the school, the government ministry. These are the containers into which the collective self pours. Loyalty flows upward through hierarchy. The salaryman at Mitsubishi does not primarily identify with all Japanese people in the abstract. He identifies with Mitsubishi. The group is bounded, defined, legible.</p>
-      <p>Yemen's collectivism runs along different lines entirely. The primary unit is not the institution — it is the tribe. And the tribe is not a metaphor. It is a living, functional, political reality. In much of Yemen, when something goes wrong — a dispute over land, a marriage negotiation, a killing that demands resolution — it is not the state that intervenes. It is the tribal structure. The sheikh mediates. The elders convene. Honor is the currency that makes the whole thing work.</p>
-      <p>Honor in this context is not an abstract virtue. It is a practical technology. In a country where the state has never fully controlled its own territory, where the central government has always been more aspiration than reality, honor is what creates accountability. If you wrong a man, you have wronged his tribe. His tribe has mechanisms — social, political, sometimes violent — to respond. This keeps behavior in check in the absence of institutions that can do the same.</p>
-      <p>Japan solved the problem of social order through institutions. Yemen solved it through kinship and honor. Both solutions work. Both have costs.</p>
-      <p>---</p>
-      <p>## What shame does</p>
-      <p>Japan is often described as a shame culture, in contrast to the guilt cultures of the Christian West. The distinction, first made by Ruth Benedict in her 1946 study of Japan, is that guilt is internal — you feel bad because you believe you did wrong — while shame is external — you feel bad because others know you did wrong, or might find out. The engine of Japanese social compliance is not conscience. It is the gaze of others.</p>
-      <p>This is not a criticism. It is a description of an extraordinarily effective social technology. The Japanese train system runs on time not because of fines or fear of punishment, but because lateness would be embarrassing. Not embarrassing to the individual alone — embarrassing in a way that would radiate outward, that would cause others to associate with someone who had failed to maintain the standard. The standard is maintained because everyone knows everyone else is watching, and everyone cares about being watched.</p>
-      <p>The result is a society of almost supernatural functional reliability. Wallets left on trains are returned. Streets are clean without anyone cleaning them. Customer service operates at a level that feels, to outsiders, like performance art.</p>
-      <p>Yemen has shame too — deep, serious, structural shame. But it operates differently. The shame is tribal and gendered in ways that Japan's is not. A man's honor is bound up with the honor of the women in his family in a way that has no Japanese equivalent. A man's reputation in his community depends on his generosity, his courage, his ability to protect and provide — not on his punctuality or his professional performance. The public self that must be maintained is different.</p>
-      <p>But the underlying mechanism is the same: the gaze of the community shapes behavior more powerfully than any law. The difference is what the community is looking at.</p>
-      <p>---</p>
-      <p>## Time</p>
-      <p>Japan has a complicated relationship with time. On one hand, the famous precision — the train that arrives at 9:47 arrives at 9:47, not 9:48, not 9:46. On the other hand, a deep continuity with the past that makes Japan one of the oldest continuously functioning civilizations on earth. The Imperial house has existed, in some form, for over a thousand years. Shinto shrines are rebuilt every twenty years using ancient techniques, not because the old structure has degraded, but because the act of rebuilding is itself the tradition. Time is not something you escape. It is something you inhabit, generation by generation, each one adding a layer to something that will outlast them all.</p>
-      <p>Yemen is ancient in a different way. It is home to some of the oldest continuously inhabited cities in the world. Sana'a's old city has been lived in for over two thousand years. The tower houses, built from rammed earth and gypsum, have stood for centuries. But Yemeni time does not feel like Japanese time. Where Japan's relationship with tradition is precise and formal — the ceremony performed exactly so, the technique passed down unchanged — Yemen's is more fluid, more oral, more improvisational.</p>
-      <p>A Yemeni elder can recite his tribal genealogy back thirty generations. The past is alive in him in a very literal sense. The dispute his great-great-great-grandfather had with a neighboring tribe may still technically be unresolved. History is not archived. It is carried.</p>
-      <p>In Japan, the past is enshrined. In Yemen, the past is inhabited.</p>
-      <p>---</p>
-      <p>## Religion</p>
-      <p>Islam arrived in Yemen in the 7th century and has been the central organizing principle of Yemeni life ever since. But Yemeni Islam is not monolithic. There are Sunni communities in the south and east, Zaydi Shia in the north and northwest, Sufi traditions that have woven themselves into folk practice, and Ismaili communities in the mountains. The variation matters less than the commonality: in Yemen, God is not background. God is the frame through which everything is understood. When a Yemeni says *inshallah* — if God wills it — he is not being evasive. He is locating the event in question within the correct cosmological context. Whether it happens is not entirely up to him. This is not fatalism in the Western sense, which implies passivity. It is a different distribution of agency between the human and the divine.</p>
-      <p>Japan is one of the most irreligious countries in the world by conventional measures. In surveys, most Japanese people say they have no religion. And yet Japan is saturated with religious practice. Shinto shrines and Buddhist temples are visited constantly, not as acts of faith in the Western sense but as acts of connection — to ancestors, to place, to something that exceeds the individual. New Year's is the most important holiday in Japan, and millions visit shrines. Not because they believe in the kami in any doctrinal sense. But because not going would be a kind of severance from something they are not willing to sever from.</p>
-      <p>Japan has spirituality without theology. Yemen has theology without, in many cases, formal institutional religion — the mosque is central, but so is the shrine of the local saint, the protective amulet, the healer who reads from the Quran in ways that no seminary would endorse.</p>
-      <p>Both countries have found ways to hold the sacred that do not require the Western binary of believer or non-believer.</p>
-      <p>---</p>
-      <p>## The face you show</p>
-      <p>Every culture has a concept of the public self and the private self. What varies is the distance between them.</p>
-      <p>In Japan, the distance is formalized in language. There is *tatemae* — the face you show the world, the official position, the socially acceptable surface — and *honne* — the true feelings underneath, what you actually want, what you actually think. The two are not expected to match. This is not hypocrisy. It is courtesy. You maintain tatemae because revealing honne at the wrong moment, to the wrong person, in the wrong register, would be disruptive. It would impose your interior on someone who did not ask for it. It would disturb the surface on which everyone is trying to stand.</p>
-      <p>Westerners often find this maddening. They want directness. They want to know what you actually think. They interpret tatemae as deception. But this misses the point. Tatemae is a gift. It is the decision to absorb conflict rather than export it. The Japanese colleague who says "that might be difficult" when he means "that is impossible and I cannot believe you suggested it" is not lying. He is protecting you from the full force of his assessment, and protecting the relationship from a rupture that neither of you needs.</p>
-      <p>Yemen is more direct, in some ways, and less direct in others. A Yemeni will tell you quickly what he thinks of a political situation, an enemy, a piece of news. Opinion is not withheld. But around personal matters — family, money, the things that touch honor — there is an elaborate indirection. You do not ask directly. You circle. You establish context. You let the other person understand what you are asking without requiring them to respond to the thing directly. This too is a form of protection — not of the relationship's surface, but of the other person's dignity.</p>
-      <p>Both cultures have developed sophisticated technologies for navigating the space between what is felt and what is said. They just drew the map differently.</p>
-      <p>---</p>
-      <p>## What they share</p>
-      <p>It would be easy to conclude from all of this that Japan and Yemen are simply opposites — that they represent two poles of human cultural possibility, and that the space between them contains everything else. But that is not quite right.</p>
-      <p>Both cultures place enormous value on hospitality, though they express it differently. The Japanese host who has spent three days preparing a meal is not so different from the Yemeni host who has slaughtered a goat on short notice. Both are saying: your presence is worth my best effort.</p>
-      <p>Both cultures have a highly developed aesthetic sense that runs through everything — not just art and music, but food, dress, architecture, the way a room is arranged, the way a sentence is constructed. In Japan this aesthetic is called *wabi-sabi*, the beauty of impermanence and imperfection. In Yemen it lives in the carved plasterwork of the tower houses, in the elaborate silver jewelry of the tribes, in the tradition of *zamil* — improvised poetry composed and delivered in the moment, competitive and virtuosic, a form that has no real equivalent anywhere else on earth.</p>
-      <p>Both cultures have been shaped by geography in profound ways. Japan's island isolation created a hothouse for cultural development — the same pressures that made it intensely homogeneous also made it intensely refined. Yemen's mountainous terrain — some of the most dramatic landscape on the Arabian Peninsula — created natural fortresses that allowed different communities to develop differently, to maintain independence from central authority, to resist the kinds of homogenization that flat, accessible terrain tends to produce.</p>
-    </div>
-  </div>
-
-
-  <!-- essay_1780165182572 -->
-  <div id="essay_1780165182572" class="page">
-    <a class="back-link" href="#" onclick="showPage('home'); return false;">← Essays</a>
-    <div class="essay-header">
-      <h1 class="essay-title">test2</h1>
-      <div class="essay-meta">may</div>
-    </div>
-    <div class="essay-body">
-      <p>hello</p>
-    </div>
-  </div>
-
-  <!-- ABOUT PAGE -->
-  <div id="about" class="page">
-    <div class="about-body">
-      <p>Write a short bio here. Keep it plain — who you are, what you care about, maybe where you're based. A sentence or two is enough.</p>
-      <p>You can add a link to your Twitter, email, or wherever you want people to reach you.</p>
-    </div>
-  </div>
-
-  <footer>
-    &copy; 2025
-  </footer>
-
+  <footer>&copy; 2026</footer>
 </div>
 
 <script>
-  function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+  let essays = [];
+
+  async function loadEssays() {
+    try {
+      const res = await fetch('/essays.json?t=' + Date.now());
+      const data = await res.json();
+      essays = data.essays || [];
+      showHome();
+    } catch (e) {
+      document.getElementById('content').innerHTML = '<p class="empty-state">Could not load essays.</p>';
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderParagraphs(body) {
+    return body.split(/\n\n+/).map(p => `<p>${escapeHtml(p.trim()).replace(/\n/g, '<br>')}</p>`).join('');
+  }
+
+  function showHome() {
+    const content = document.getElementById('content');
+    if (essays.length === 0) {
+      content.innerHTML = '<p class="section-label">Essays</p><p class="empty-state">Nothing here yet.</p>';
+    } else {
+      content.innerHTML = `
+        <p class="section-label">Essays</p>
+        <ul class="essays">
+          ${essays.map(e => `
+            <li class="essay-item">
+              <button class="essay-link" onclick="showEssay('${escapeHtml(e.id)}')">${escapeHtml(e.title)}</button>
+              <span class="essay-date">${escapeHtml(e.date)}</span>
+            </li>
+          `).join('')}
+        </ul>`;
+    }
     window.scrollTo(0, 0);
   }
 
   function showEssay(id) {
-    showPage(id);
+    const essay = essays.find(e => e.id === id);
+    if (!essay) return showHome();
+    document.getElementById('content').innerHTML = `
+      <button class="back-link" onclick="showHome()">← Essays</button>
+      <div class="essay-header">
+        <h1 class="essay-title">${escapeHtml(essay.title)}</h1>
+        <div class="essay-meta">${escapeHtml(essay.date)}</div>
+      </div>
+      <div class="essay-body">${renderParagraphs(essay.body)}</div>`;
+    window.scrollTo(0, 0);
   }
-</script>
 
+  loadEssays();
+</script>
 </body>
 </html>

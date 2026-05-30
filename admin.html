@@ -16,6 +16,7 @@
     --border: #e8e6e0;
     --bg: #faf9f7;
     --accent: #c8603a;
+    --success: #2d7a4f;
   }
   html { font-size: 18px; }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 0 1.5rem; }
@@ -29,7 +30,7 @@
   label { display: block; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.4rem; }
   input[type="password"], input[type="text"] {
     width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border);
-    background: white; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    background: white; font-family: inherit; font-size: 0.95rem;
     color: var(--text); border-radius: 4px; outline: none; transition: border-color 0.15s;
   }
   input:focus { border-color: var(--accent); }
@@ -42,10 +43,10 @@
   .field { margin-bottom: 1.25rem; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
 
-  .btn { display: inline-block; padding: 0.6rem 1.25rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; border-radius: 4px; cursor: pointer; border: none; transition: opacity 0.15s; }
+  .btn { display: inline-block; padding: 0.6rem 1.25rem; font-family: inherit; font-size: 0.88rem; font-weight: 500; border-radius: 4px; cursor: pointer; border: none; transition: opacity 0.15s; }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-primary { background: var(--text); color: white; }
-  .btn-primary:hover:not(:disabled) { opacity: 0.8; }
+  .btn-primary:hover:not(:disabled) { opacity: 0.85; }
   .btn-ghost { background: none; color: var(--muted); border: 1px solid var(--border); }
   .btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--text); }
   .btn-danger { background: none; color: var(--accent); border: 1px solid var(--border); font-size: 0.8rem; padding: 0.35rem 0.75rem; }
@@ -53,7 +54,7 @@
   .btn-sm { font-size: 0.78rem; padding: 0.3rem 0.65rem; }
 
   .status { margin-top: 0.75rem; font-size: 0.82rem; color: var(--muted); min-height: 1.2rem; }
-  .status.success { color: #2d7a4f; }
+  .status.success { color: var(--success); }
   .status.error { color: var(--accent); }
 
   .section-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.75rem; }
@@ -62,7 +63,7 @@
   .essay-row { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 0; border-bottom: 1px solid var(--border); gap: 1rem; }
   .essay-row:first-child { border-top: 1px solid var(--border); }
   .essay-info { flex: 1; min-width: 0; }
-  .essay-row-title { font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .essay-row-title { font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
   .essay-row-date { font-size: 0.75rem; color: var(--faint); margin-top: 0.1rem; }
   .essay-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
 
@@ -70,6 +71,7 @@
 
   .form-title { font-size: 1rem; font-weight: 500; margin-bottom: 1.5rem; }
   .form-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .empty { font-size: 0.85rem; color: var(--faint); padding: 0.9rem 0; }
 
   #login, #dashboard { }
   #dashboard { display: none; }
@@ -86,7 +88,7 @@
   <div id="login">
     <div class="field">
       <label>Password</label>
-      <input type="password" id="password" placeholder="Enter admin password" />
+      <input type="password" id="password" placeholder="Enter admin password" autocomplete="current-password" />
     </div>
     <button class="btn btn-primary" onclick="unlock()">Enter</button>
     <div class="status error" id="login-error"></div>
@@ -94,16 +96,13 @@
 
   <!-- DASHBOARD -->
   <div id="dashboard">
-
-    <!-- ESSAY LIST -->
     <p class="section-label">Your essays</p>
     <ul class="essay-list" id="essay-list">
-      <li style="font-size:0.85rem; color:var(--faint); padding: 0.75rem 0;">Loading...</li>
+      <li class="empty">Loading...</li>
     </ul>
 
     <hr class="divider">
 
-    <!-- WRITE / EDIT FORM -->
     <p class="form-title" id="form-title">New essay</p>
     <div class="row">
       <div>
@@ -112,7 +111,7 @@
       </div>
       <div>
         <label>Date</label>
-        <input type="text" id="date" placeholder="May 2025" />
+        <input type="text" id="date" placeholder="May 2026" />
       </div>
     </div>
     <div class="field">
@@ -128,115 +127,148 @@
 </div>
 
 <script>
-  const ADMIN_PASSWORD = 'Temporary0912#';
+  // Password is held in memory only after entry. Not stored. The server validates on every request.
+  let sessionPassword = null;
   let editingId = null;
 
-  function unlock() {
-    const pw = document.getElementById('password').value;
-    if (pw === ADMIN_PASSWORD) {
-      document.getElementById('login').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      loadEssays();
-    } else {
-      document.getElementById('login-error').textContent = 'Wrong password.';
+  function escAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+  async function api(body) {
+    if (!sessionPassword) return { error: 'Not logged in' };
+    try {
+      const res = await fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: sessionPassword, ...body })
+      });
+      return await res.json();
+    } catch (e) {
+      return { error: 'Network error' };
     }
+  }
+
+  async function unlock() {
+    const pw = document.getElementById('password').value;
+    if (!pw) {
+      document.getElementById('login-error').textContent = 'Enter a password.';
+      return;
+    }
+    sessionPassword = pw;
+    // Test auth by attempting a list
+    const result = await api({ action: 'list' });
+    if (result.error) {
+      sessionPassword = null;
+      document.getElementById('login-error').textContent = result.error;
+      return;
+    }
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    renderEssays(result.essays);
   }
   document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
 
-  async function api(body) {
-    const res = await fetch('/api/publish', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: ADMIN_PASSWORD, ...body })
-    });
-    return res.json();
-  }
-
-  async function loadEssays() {
+  function renderEssays(essays) {
     const list = document.getElementById('essay-list');
-    list.innerHTML = '<li style="font-size:0.85rem;color:var(--faint);padding:0.75rem 0">Loading...</li>';
-    const data = await api({ action: 'list' });
-    if (!data.essays || data.essays.length === 0) {
-      list.innerHTML = '<li style="font-size:0.85rem;color:var(--faint);padding:0.75rem 0">No essays yet.</li>';
+    if (!essays || essays.length === 0) {
+      list.innerHTML = '<li class="empty">No essays yet.</li>';
       return;
     }
-    list.innerHTML = data.essays.map(e => `
+    list.innerHTML = essays.map(e => `
       <li class="essay-row">
         <div class="essay-info">
-          <div class="essay-row-title">${e.title}</div>
-          <div class="essay-row-date">${e.date}</div>
+          <div class="essay-row-title">${escAttr(e.title)}</div>
+          <div class="essay-row-date">${escAttr(e.date)}</div>
         </div>
         <div class="essay-actions">
-          <button class="btn btn-ghost btn-sm" onclick="startEdit('${e.id}', '${escAttr(e.title)}', '${escAttr(e.date)}')">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteEssay('${e.id}', '${escAttr(e.title)}')">Delete</button>
+          <button class="btn btn-ghost btn-sm" onclick="startEdit('${escAttr(e.id)}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteEssay('${escAttr(e.id)}', '${escAttr(e.title)}')">Delete</button>
         </div>
       </li>`).join('');
   }
 
-  function escAttr(s) { return s.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+  async function refreshList() {
+    const result = await api({ action: 'list' });
+    if (result.error) {
+      showStatus('error', 'Failed to refresh list: ' + result.error);
+      return;
+    }
+    renderEssays(result.essays);
+  }
 
-  async function startEdit(id, title, date) {
+  async function startEdit(id) {
     editingId = id;
     document.getElementById('form-title').textContent = 'Edit essay';
-    document.getElementById('title').value = title;
-    document.getElementById('date').value = date;
-    document.getElementById('body').value = 'Loading...';
     document.getElementById('submit-btn').textContent = 'Save changes';
     document.getElementById('cancel-btn').style.display = 'inline-block';
+    document.getElementById('title').value = '';
+    document.getElementById('date').value = '';
+    document.getElementById('body').value = 'Loading...';
     document.getElementById('body').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const data = await api({ action: 'get', essayId: id });
-    document.getElementById('body').value = data.body || '';
+    const result = await api({ action: 'get', essayId: id });
+    if (result.error) {
+      showStatus('error', result.error);
+      cancelEdit();
+      return;
+    }
+    document.getElementById('title').value = result.title || '';
+    document.getElementById('date').value = result.date || '';
+    document.getElementById('body').value = result.body || '';
   }
 
   function cancelEdit() {
     editingId = null;
     document.getElementById('form-title').textContent = 'New essay';
+    document.getElementById('submit-btn').textContent = 'Publish';
+    document.getElementById('cancel-btn').style.display = 'none';
     document.getElementById('title').value = '';
     document.getElementById('date').value = '';
     document.getElementById('body').value = '';
-    document.getElementById('submit-btn').textContent = 'Publish';
-    document.getElementById('cancel-btn').style.display = 'none';
-    document.getElementById('status').textContent = '';
-    document.getElementById('status').className = 'status';
+    showStatus('', '');
+  }
+
+  function showStatus(kind, msg) {
+    const status = document.getElementById('status');
+    status.className = 'status' + (kind ? ' ' + kind : '');
+    status.textContent = msg;
   }
 
   async function submitForm() {
     const title = document.getElementById('title').value.trim();
     const date = document.getElementById('date').value.trim();
     const body = document.getElementById('body').value.trim();
-    const status = document.getElementById('status');
+    if (!title || !date || !body) { showStatus('error', 'Fill in all fields.'); return; }
+
     const btn = document.getElementById('submit-btn');
-    if (!title || !date || !body) { status.className = 'status error'; status.textContent = 'Fill in all fields.'; return; }
     btn.disabled = true;
-    status.className = 'status';
-    status.textContent = editingId ? 'Saving...' : 'Publishing...';
-    const data = await api({ action: editingId ? 'edit' : 'publish', title, date, body, essayId: editingId });
-    if (data.ok) {
-      status.className = 'status success';
-      status.textContent = editingId ? 'Saved! Site updates in ~30 seconds.' : 'Published! Site updates in ~30 seconds.';
-      cancelEdit();
-      setTimeout(loadEssays, 2000);
-    } else {
-      status.className = 'status error';
-      status.textContent = 'Error: ' + data.error;
-    }
+    showStatus('', editingId ? 'Saving...' : 'Publishing...');
+
+    const result = await api({
+      action: editingId ? 'edit' : 'publish',
+      essayId: editingId,
+      title, date, body
+    });
+
     btn.disabled = false;
+
+    if (result.error) {
+      showStatus('error', result.error);
+      return;
+    }
+    showStatus('success', editingId ? 'Saved! Site updates in ~30 seconds.' : 'Published! Site updates in ~30 seconds.');
+    cancelEdit();
+    refreshList();
   }
 
   async function deleteEssay(id, title) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
-    const status = document.getElementById('status');
-    status.className = 'status';
-    status.textContent = 'Deleting...';
-    const data = await api({ action: 'delete', essayId: id });
-    if (data.ok) {
-      status.className = 'status success';
-      status.textContent = 'Deleted. Site updates in ~30 seconds.';
-      setTimeout(loadEssays, 2000);
-    } else {
-      status.className = 'status error';
-      status.textContent = 'Error: ' + data.error;
+    showStatus('', 'Deleting...');
+    const result = await api({ action: 'delete', essayId: id });
+    if (result.error) {
+      showStatus('error', result.error);
+      return;
     }
+    showStatus('success', 'Deleted. Site updates in ~30 seconds.');
+    refreshList();
   }
 </script>
 </body>
