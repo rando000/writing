@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Write</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --text: #1a1a18;
+    --muted: #6b6b65;
+    --faint: #9b9b94;
+    --border: #e8e6e0;
+    --bg: #faf9f7;
+    --accent: #c8603a;
+  }
+  html { font-size: 18px; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 0 1.5rem; }
+  .site { max-width: 640px; margin: 0 auto; padding: 4rem 0 6rem; }
+
+  header { margin-bottom: 3rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; }
+  .site-name { font-weight: 500; font-size: 1rem; color: var(--text); text-decoration: none; }
+  .back { font-size: 0.82rem; color: var(--muted); text-decoration: none; }
+  .back:hover { color: var(--text); }
+
+  #login, #editor { }
+  #editor { display: none; }
+
+  label { display: block; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.4rem; }
+
+  input[type="password"],
+  input[type="text"],
+  input[type="date"] {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus { border-color: var(--accent); }
+
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    background: white;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--text);
+    border-radius: 4px;
+    outline: none;
+    resize: vertical;
+    min-height: 480px;
+    transition: border-color 0.15s;
+  }
+  textarea:focus { border-color: var(--accent); }
+
+  .field { margin-bottom: 1.5rem; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+
+  button {
+    background: var(--text);
+    color: white;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  button:hover { opacity: 0.8; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .status { margin-top: 1rem; font-size: 0.85rem; color: var(--muted); }
+  .status.success { color: #2d7a4f; }
+  .status.error { color: var(--accent); }
+
+  .error-msg { font-size: 0.82rem; color: var(--accent); margin-top: 0.4rem; }
+</style>
+</head>
+<body>
+<div class="site">
+  <header>
+    <a class="site-name" href="/">Writing</a>
+    <a class="back" href="/">← Back to site</a>
+  </header>
+
+  <div id="login">
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter admin password" />
+      <div class="error-msg" id="login-error"></div>
+    </div>
+    <button onclick="unlock()">Enter</button>
+  </div>
+
+  <div id="editor">
+    <div class="row">
+      <div>
+        <label>Title</label>
+        <input type="text" id="title" placeholder="Essay title" />
+      </div>
+      <div>
+        <label>Date</label>
+        <input type="text" id="date" placeholder="May 2025" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Body — separate paragraphs with a blank line</label>
+      <textarea id="body" placeholder="Write your essay here..."></textarea>
+    </div>
+    <button id="publish-btn" onclick="publish()">Publish</button>
+    <div class="status" id="status"></div>
+  </div>
+</div>
+
+<script>
+  const ADMIN_PASSWORD = 'changeme';
+
+  function unlock() {
+    const pw = document.getElementById('password').value;
+    if (pw === ADMIN_PASSWORD) {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('editor').style.display = 'block';
+    } else {
+      document.getElementById('login-error').textContent = 'Wrong password.';
+    }
+  }
+
+  document.getElementById('password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlock();
+  });
+
+  async function publish() {
+    const title = document.getElementById('title').value.trim();
+    const date = document.getElementById('date').value.trim();
+    const body = document.getElementById('body').value.trim();
+    const status = document.getElementById('status');
+    const btn = document.getElementById('publish-btn');
+
+    if (!title || !date || !body) {
+      status.className = 'status error';
+      status.textContent = 'Fill in all fields.';
+      return;
+    }
+
+    btn.disabled = true;
+    status.className = 'status';
+    status.textContent = 'Publishing...';
+
+    try {
+      const res = await fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: ADMIN_PASSWORD, title, date, body })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        status.className = 'status success';
+        status.textContent = 'Published! Site will update in ~30 seconds.';
+        document.getElementById('title').value = '';
+        document.getElementById('date').value = '';
+        document.getElementById('body').value = '';
+      } else {
+        status.className = 'status error';
+        status.textContent = 'Error: ' + data.error;
+      }
+    } catch (e) {
+      status.className = 'status error';
+      status.textContent = 'Network error.';
+    }
+    btn.disabled = false;
+  }
+</script>
+</body>
+</html>
